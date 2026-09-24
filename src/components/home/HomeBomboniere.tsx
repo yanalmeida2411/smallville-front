@@ -5,6 +5,7 @@ import PromoCandy from "./PromoCandy";
 import { getBomboniereCatalog } from "@/src/actions/catalogActions";
 import { getServerUser } from "@/src/lib/auth";
 import { PRODUCT_CATEGORIES, CatalogProduct } from "@/src/types/admin";
+import { getMockBomboniere } from "@/src/mocks/homeMocks";
 
 /** Quantos produtos a Home mostra antes de mandar para o catálogo completo. */
 const HOME_PRODUCTS_LIMIT = 8;
@@ -42,7 +43,8 @@ export default async function HomeBomboniere() {
   // desce até `SnackAddButton`, que troca o controle de quantidade pelo
   // convite ao login.
   const result = await getBomboniereCatalog();
-  const catalog = result.success ? result.data : undefined;
+  // Sem backend, mostra a vitrine de exemplo em vez da mensagem de erro.
+  const catalog = result.success ? result.data : getMockBomboniere();
   const canPurchase = !!user;
 
   // Destaque: primeiro combo disponível. Sem combos cadastrados, a Home
@@ -76,11 +78,7 @@ export default async function HomeBomboniere() {
         aparece no carrinho quando finalizar a compra do ingresso.
       </p>
 
-      {!result.success ? (
-        <p className="mt-8 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-          {result.error}
-        </p>
-      ) : !highlights.length && !featured ? (
+      {!highlights.length && !featured ? (
         <p className="mt-8 rounded-xl border border-grayScale-600 bg-gray-surface px-6 py-12 text-center text-sm text-grayScale-400">
           Nenhum produto disponível no momento.
         </p>

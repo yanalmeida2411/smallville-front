@@ -8,6 +8,7 @@ import {
   getUpcomingReleases,
 } from "@/src/actions/catalogActions";
 import { CatalogMovie } from "@/src/types/admin";
+import { getMockNowPlaying, getMockReleases } from "@/src/mocks/homeMocks";
 
 /** Quantos filmes entram na rotação do destaque. */
 const HERO_SIZE = 5;
@@ -20,8 +21,12 @@ export default async function HomePage() {
     getUpcomingReleases(),
   ]);
 
-  const nowPlayingMovies = nowPlaying.success ? nowPlaying.data : [];
-  const releaseMovies = releases.success ? releases.data : [];
+  // Sem backend (ex.: só o front publicado), a Home cai nos dados de
+  // vitrine para não ficar vazia na apresentação.
+  const nowPlayingMovies = nowPlaying.success
+    ? nowPlaying.data
+    : getMockNowPlaying();
+  const releaseMovies = releases.success ? releases.data : getMockReleases();
 
   /**
    * O destaque usa os filmes que já estão em cartaz — são os que o botão
